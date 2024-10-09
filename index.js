@@ -26,16 +26,28 @@ const axiosConfig = {
     })
 };
 
+
 server.get('/meteors', async (req, res) => {
     try {
         const response = await axios.get(apiUrl, axiosConfig);
-        res.json(response.data);
+        const filteredData = mainInfoFilter(response);
+
+        res.json(filteredData);
     } catch (error) {
         console.error('Error fetching data:', error);
         res.status(500).json({
-            error: 'Failed to fetch data' });
+            error: 'Failed to fetch data'
+        });
     }
 });
+
+function getSortedMeteors(response) {
+    return Object.entries(response.data.near_earth_objects).sort((a, b) => {
+        const dateA = new Date(a[0]);
+        const dateB = new Date(b[0]);
+        return dateA.getTime() - dateB.getTime();
+    });
+}
 
 function getMonday(date) {
     let day = date.getDay(),
@@ -54,3 +66,33 @@ function getWeekRange(date) {
     const endDate = format(getFriday(date), "yyyy-MM-dd");
     return {startDate, endDate};
 }
+
+function mainInfoFilter(response) {
+    const filteredData = {};
+
+    for (const [date, meteors] of getSortedMeteors(response)) {
+        filteredData[date] = meteors.reduce((acc, meteor) => {
+            if (!meteor.close_approach_data || !meteor.close_approach_data[0]) {
+                return acc;
+            }
+            return [
+                ...acc,
+                createMainInfoEntity(meteor)
+            ];
+
+        }, []);
+    }
+    return filteredData;
+}
+
+function createMainInfoEntity(meteor) {
+    return {
+        id: meteor.id,
+        name: meteor.name,
+        diameter: (meteor.estimated_diameter.meters.estimated_diameter_min + meteor.estimated_diameter.meters.estimated_diameter_max) / 2,
+        isHazardous: meteor.is_potentially_hazardous_asteroid,
+        closeApproachDate: meteor.close_approach_data[0].close_approach_date_full,
+        relativeVelocity: meteor.close_approach_data[0].relative_velocity.kilometers_per_second
+    };
+}
+
