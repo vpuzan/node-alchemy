@@ -5,18 +5,13 @@ import {format} from "date-fns";
 
 dotenv.config();
 
-
-const NASA_API_KEY = process.env.NASA_API_KEY;
-
-function getWeekRange(date) {
-    const startDate = format(getMonday(date), "yyyy-MM-dd");
-    const endDate = format(getFriday(date), "yyyy-MM-dd");
-    return {startDate, endDate};
-}
+const {NASA_API_KEY, NASA_API_URL} = process.env || (() => {
+    throw new Error('Missing env keys');
+})();
 
 const {startDate, endDate} = getWeekRange(new Date());
 
-const apiUrl = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${startDate}&end_date=${endDate}&api_key=${NASA_API_KEY}`;
+const apiUrl = `${NASA_API_URL}?start_date=${startDate}&end_date=${endDate}&api_key=${NASA_API_KEY}`;
 
 const axiosConfig = {
     httpsAgent: new https.Agent({
@@ -55,4 +50,10 @@ function getFriday(date) {
     var day = date.getDay(),
         diff = date.getDate() - day + (day <= 4 ? 5 : -2);
     return new Date(date.setDate(diff));
+}
+
+function getWeekRange(date) {
+    const startDate = format(getMonday(date), "yyyy-MM-dd");
+    const endDate = format(getFriday(date), "yyyy-MM-dd");
+    return {startDate, endDate};
 }
