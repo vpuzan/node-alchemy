@@ -10,12 +10,10 @@ const {NASA_API_KEY, NASA_API_URL, PORT} = process.env || (() => {
     throw new Error('Missing env keys');
 })();
 
-
 const server = express();
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-
 });
 
 const {startDate, endDate} = getWeekRange(new Date());
@@ -28,35 +26,25 @@ const axiosConfig = {
     })
 };
 
-axios.get(apiUrl, axiosConfig)
-    .then(response => {
-        const {data} = response;
-        console.log('JSON Response:', JSON.stringify(data, null, 2));
-
-        console.log(`Number of asteroids seen from Monday to Friday: ${data?.element_count}`);
-
-        Object.entries(data?.near_earth_objects || {})
-            .sort((a, b) => {
-                const dateA = new Date(a[0]);
-                const dateB = new Date(b[0]);
-                return dateA.getTime() - dateB.getTime();
-            })
-            .forEach(([key, value]) => {
-                console.log(`On ${key} there are ${value.length} asteroids near earth.`);
-            });
-    })
-    .catch(error => {
+server.get('/meteors', async (req, res) => {
+    try {
+        const response = await axios.get(apiUrl, axiosConfig);
+        res.json(response.data);
+    } catch (error) {
         console.error('Error fetching data:', error);
-    });
+        res.status(500).json({
+            error: 'Failed to fetch data' });
+    }
+});
 
 function getMonday(date) {
-    var day = date.getDay(),
+    let day = date.getDay(),
         diff = date.getDate() - day + (day === 0 ? -6 : 1);
     return new Date(date.setDate(diff));
 }
 
 function getFriday(date) {
-    var day = date.getDay(),
+    let day = date.getDay(),
         diff = date.getDate() - day + (day <= 4 ? 5 : -2);
     return new Date(date.setDate(diff));
 }
