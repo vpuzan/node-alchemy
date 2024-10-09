@@ -2,12 +2,21 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import https from 'https';
 import {format} from "date-fns";
+import express from "express";
 
 dotenv.config();
 
-const {NASA_API_KEY, NASA_API_URL} = process.env || (() => {
+const {NASA_API_KEY, NASA_API_URL, PORT} = process.env || (() => {
     throw new Error('Missing env keys');
 })();
+
+
+const server = express();
+
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+
+});
 
 const {startDate, endDate} = getWeekRange(new Date());
 
