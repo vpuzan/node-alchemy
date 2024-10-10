@@ -1,12 +1,27 @@
 import {fetchMeteors} from '../repository/nasa.js';
 import {format} from "date-fns";
 
-const {startDate, endDate} = getWeekRange(new Date());
-
-export const getSortedAndFilteredMeteors = async () => {
+export const getSortedAndFilteredMeteors = async (startDateQuery, endDateQuery, count, wereDangerousMeteors) => {
+    let {startDate, endDate} = setUpDatePeriod(startDateQuery, endDateQuery);
     const response = await fetchMeteors(startDate, endDate);
-    return mainInfoFilter(response);
+    let filteredMeteorData = mainInfoFilter(response);
+    pushMeteorsCount(count, filteredMeteorData, response);
+    pushDengerousMeteors(wereDangerousMeteors, filteredMeteorData);
+    return filteredMeteorData;
 };
+
+function getDangerousMeteors(meteorsData) {
+    const dangerousMeteors = [];
+    for (const [date, meteors] of Object.entries(meteorsData)) {
+        meteors.forEach(meteor => {
+            if (meteor.isHazardous) {
+                dangerousMeteors.push(meteor);
+            }
+        });
+    }
+
+    return dangerousMeteors;
+}
 
 function getSortedMeteors(response) {
     return Object.entries(response.near_earth_objects).sort((a, b) => {
@@ -16,7 +31,7 @@ function getSortedMeteors(response) {
     });
 }
 
-function mainInfoFilter(response) {
+function mainInfoFilter(response, count, wereDangerousMeteors) {
     const filteredData = {};
 
     for (const [date, meteors] of getSortedMeteors(response)) {
@@ -31,7 +46,7 @@ function mainInfoFilter(response) {
 
         }, []);
     }
-    return filteredData;
+    return {meteorsData: filteredData, count};
 }
 
 function createMainInfoEntity(meteor) {
@@ -45,20 +60,51 @@ function createMainInfoEntity(meteor) {
     };
 }
 
-function getMonday(date) {
-    let day = date.getDay(),
-        diff = date.getDate() - day + (day === 0 ? -6 : 1);
-    return new Date(date.setDate(diff));
+function getFirstDayOfWeek(date, firstDayOfWeek = 1) {
+    const day = date.getDay();
+    let diff = day - firstDayOfWeek;
+    if (diff < 0) {
+        diff -= 7;
+    }
+    return new Date(date.setDate(date.getDate() - diff));
 }
-
-function getFriday(date) {
-    let day = date.getDay(),
-        diff = date.getDate() - day + (day <= 4 ? 5 : -2);
-    return new Date(date.setDate(diff));
+function getLastDayOfWeek(date, lastDayOfWeek = 6) {
+    const day = date.getDay();
+    let diff = lastDayOfWeek - day;
+    if (diff <= 0) {
+        diff += 7;
+    }
+    return new Date(date.setDate(date.getDate() + diff));
 }
 
 function getWeekRange(date) {
-    const startDate = format(getMonday(date), "yyyy-MM-dd");
-    const endDate = format(getFriday(date), "yyyy-MM-dd");
+    const startDate = format(getFirstDayOfWeek(date), "yyyy-MM-dd");
+    const endDate = format(getLastDayOfWeek(date), "yyyy-MM-dd");
+    return {startDate, endDate};
+}
+
+function pushMeteorsCount(count, filteredMeteorData, response) {
+    if (Boolean(count)) {
+        filteredMeteorData.count = response.element_count;
+    }
+}
+
+function pushDengerousMeteors(wereDangerousMeteors, filteredMeteorData) {
+    if (Boolean(wereDangerousMeteors)) {
+        filteredMeteorData.wereDangerousMeteors = getDangerousMeteors(filteredMeteorData.meteorsData);
+        if (filteredMeteorData.wereDangerousMeteors.length > 0) {
+            filteredMeteorData.isWereDangerousMeteors = true;
+        }
+    }
+}
+
+function setUpDatePeriod(startDateQuery, endDateQuery) {
+    let {startDate, endDate} = getWeekRange(new Date());
+    if (startDateQuery) {
+        startDate = startDateQuery;
+    }
+    if (endDateQuery) {
+        endDate = endDateQuery;
+    }
     return {startDate, endDate};
 }

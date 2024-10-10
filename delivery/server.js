@@ -13,7 +13,8 @@ server.listen(PORT, () => {
 
 server.get('/meteors', async (req, res) => {
     try {
-        const filteredData = await getSortedAndFilteredMeteors();
+        const {startDate, endDate, count, wereDangerousMeteors } = req.query;
+        const filteredData = await getSortedAndFilteredMeteors(startDate, endDate, count, wereDangerousMeteors);
         res.json(filteredData);
     } catch (error) {
         console.error('Error fetching data:', error);
