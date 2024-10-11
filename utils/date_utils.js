@@ -1,6 +1,4 @@
-import { format } from "date-fns";
-import { startOfWeek } from "date-fns";
-import { endOfWeek } from "date-fns";
+import { format, startOfWeek, endOfWeek } from "date-fns";
 
 export function getWeekRange(date) {
     const startDate = format(startOfWeek(date), "yyyy-MM-dd");

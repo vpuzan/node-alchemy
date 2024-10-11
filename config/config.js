@@ -8,6 +8,5 @@ const {NASA_API_URL, NASA_API_KEY,PORT} = process.env || (() => {
 
 export const config = {
     port: PORT,
-    NASA_API_KEY: NASA_API_KEY,
-    nasaUrl: `${NASA_API_URL}`
+    nasaUrl: `${NASA_API_URL}?api_key=${NASA_API_KEY}`
 }
