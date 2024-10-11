@@ -1,23 +1,36 @@
 import express from 'express';
 import {getSortedAndFilteredMeteors} from '../use_case/meteors.js';
-import dotenv from "dotenv";
-
-dotenv.config({path: './resources/.env'});
+import {config} from '../config/config.js';
+import Exception from "../exception/exception.js";
+import errorHandler from "../exception/error_middleware.js";
 
 const server = express();
-const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+function isBoolean(str) {
+    const boolMap = {
+        'true': true,
+        'false': false,
+        'yes': true,
+        'no': false,
+        '1': true,
+        '0': false
+    };
 
-server.get('/meteors', async (req, res) => {
+    return boolMap[str.toLowerCase()] ?? null;
+}
+
+server.get('/meteors', async (req, res, next) => {
     try {
         const {startDate, endDate, count, wereDangerousMeteors } = req.query;
-        const filteredData = await getSortedAndFilteredMeteors(startDate, endDate, count, wereDangerousMeteors);
+        const filteredData = await getSortedAndFilteredMeteors(startDate, endDate, isBoolean(count), isBoolean(wereDangerousMeteors));
         res.json(filteredData);
     } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).json({error: 'Failed to fetch data'});
+        next(new Exception(error.status, `Error fetching data: ${error.message}`));
     }
+});
+
+server.use(errorHandler);
+
+server.listen(config.port, () => {
+    console.log(`Server is running on port ${config.port}`);
 });
