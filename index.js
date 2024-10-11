@@ -6,14 +6,14 @@ import nunjucks from 'nunjucks';
 
 const app = express();
 
-app.use(controller)
-app.use(errorHandler)
-
 nunjucks.configure('templates', {
     autoescape: true,
     express: app
 })
 
+app.use(express.json());
+app.use(controller)
+app.use(errorHandler)
 
 app.listen(config.port, () => {
     console.log(`Server is running on port ${config.port}`);
