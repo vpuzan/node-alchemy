@@ -9,7 +9,7 @@ router.get('/meteors', async (req, res, next) => {
     try {
         const {startDate, endDate, count, wereDangerousMeteors } = req.query;
         const filteredData = await getSortedAndFilteredMeteors(startDate, endDate, isBoolean(count), isBoolean(wereDangerousMeteors));
-        res.json(filteredData);
+        res.render('../templates/meteors.njk', filteredData);
     } catch (error) {
         next(new Exception(error.status, `Error fetching data: ${error.message}`));
     }
