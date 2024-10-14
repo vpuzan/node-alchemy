@@ -7,6 +7,6 @@ export const fetchMeteors = async (startDate, endDate) => {
         start_date: startDate,
         end_date: endDate
     };
-    const response = await axiosInstance.get('', {params});
+    const response = await axiosInstance.get(axiosInstance.getUri() + config.meteorsUrl, {params});
     return response.data;
 };
