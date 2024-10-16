@@ -2,8 +2,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "lint": "eslint .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "codeformat": "prettier --write ."
   },
   "dependencies": {
     "axios": "^1.7.7",
@@ -25,6 +28,18 @@
     "eslint-plugin-promise": "^7.1.0",
     "eslint-plugin-security": "^3.0.1",
     "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "typescript": "^5.6.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

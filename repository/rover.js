@@ -6,10 +6,12 @@ export const getPhotos = async (apiKey) => {
   const params = {
     api_key: apiKey,
     sol: config.sol,
-    camera: config.camera
+    camera: config.camera,
   };
 
-  const response = await axiosInstance.get(axiosInstance.getUri() + config.photoRoverUrl, {params});
+  const response = await axiosInstance.get(
+    axiosInstance.getUri() + config.photoRoverUrl,
+    {params}
+  );
   return response.data.photos;
-
 };

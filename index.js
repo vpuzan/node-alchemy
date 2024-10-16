@@ -8,7 +8,7 @@ const app = express();
 
 nunjucks.configure('templates', {
   autoescape: true,
-  express: app
+  express: app,
 });
 
 app.use(express.json());

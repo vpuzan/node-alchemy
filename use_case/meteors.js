@@ -13,10 +13,14 @@ function createMainInfoEntity(meteor) {
   return {
     id: meteor.id,
     name: meteor.name,
-    diameter: (meteor.estimated_diameter.meters.estimated_diameter_min + meteor.estimated_diameter.meters.estimated_diameter_max) / 2,
+    diameter:
+      (meteor.estimated_diameter.meters.estimated_diameter_min +
+        meteor.estimated_diameter.meters.estimated_diameter_max) /
+      2,
     isHazardous: meteor.is_potentially_hazardous_asteroid,
     closeApproachDate: meteor.close_approach_data[0].close_approach_date_full,
-    relativeVelocity: meteor.close_approach_data[0].relative_velocity.kilometers_per_second
+    relativeVelocity:
+      meteor.close_approach_data[0].relative_velocity.kilometers_per_second,
   };
 }
 
@@ -32,7 +36,13 @@ function filterMeteors(response) {
   }, {});
 }
 
-function createResultObject(filteredMeteors, response, count, wereDangerousMeteors, dangerousMeteors) {
+function createResultObject(
+  filteredMeteors,
+  response,
+  count,
+  wereDangerousMeteors,
+  dangerousMeteors
+) {
   const result = {meteorsData: filteredMeteors};
   if (count) {
     result.count = response.element_count;
@@ -48,11 +58,16 @@ function createResultObject(filteredMeteors, response, count, wereDangerousMeteo
 
 function getDangerousMeteors(meteorsData) {
   return Object.values(meteorsData)
-    .flatMap(meteors => meteors)
-    .filter(meteor => meteor.isHazardous);
+    .flatMap((meteors) => meteors)
+    .filter((meteor) => meteor.isHazardous);
 }
 
-export const getSortedAndFilteredMeteors = async (startDateQuery, endDateQuery, count, wereDangerousMeteors) => {
+export const getSortedAndFilteredMeteors = async (
+  startDateQuery,
+  endDateQuery,
+  count,
+  wereDangerousMeteors
+) => {
   const {startDate, endDate} = setUpDatePeriod(startDateQuery, endDateQuery);
   const response = await fetchMeteors(startDate, endDate);
   // Filter response
@@ -62,10 +77,11 @@ export const getSortedAndFilteredMeteors = async (startDateQuery, endDateQuery, 
   const dangerousMeteors = getDangerousMeteors(filteredMeteors);
 
   // Create final result with additional info
-  return createResultObject(filteredMeteors, response, count, wereDangerousMeteors, dangerousMeteors);
+  return createResultObject(
+    filteredMeteors,
+    response,
+    count,
+    wereDangerousMeteors,
+    dangerousMeteors
+  );
 };
-
-
-
-
-

@@ -9,5 +9,4 @@ export const getLatestPhoto = async (apiKey) => {
   }
   photos.sort((a, b) => new Date(a.earth_date) - new Date(b.earth_date));
   return {photoUrl: photos[0].img_src, camera: config.camera};
-
 };

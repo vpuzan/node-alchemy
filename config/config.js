@@ -2,9 +2,19 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const {NASA_BASE_URL, METEORS_API_URL, PHOTOS_ROVER_API_URL, NASA_API_KEY,PORT, SOL, CAMERA} = process.env || (() => {
-  throw new Error('Missing env keys');
-})();
+const {
+  NASA_BASE_URL,
+  METEORS_API_URL,
+  PHOTOS_ROVER_API_URL,
+  NASA_API_KEY,
+  PORT,
+  SOL,
+  CAMERA,
+} =
+  process.env ||
+  (() => {
+    throw new Error('Missing env keys');
+  })();
 
 export const config = {
   port: PORT,
