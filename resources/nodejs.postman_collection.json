@@ -1,66 +1,53 @@
 {
-	"info": {
-		"_postman_id": "25bd6e07-5c44-486d-b678-12f2e1b68372",
-		"name": "node",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "10324306"
-	},
-	"item": [
-		{
-			"name": "local",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:4000/meteors",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"meteors"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "NASA",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://api.nasa.gov/neo/rest/v1/feed?start_date=2024-10-07&end_date=2024-10-11&api_key=WhhJBu83laHiy20aEKic0FQ1k70e1ewAfeooAEBH",
-					"protocol": "https",
-					"host": [
-						"api",
-						"nasa",
-						"gov"
-					],
-					"path": [
-						"neo",
-						"rest",
-						"v1",
-						"feed"
-					],
-					"query": [
-						{
-							"key": "start_date",
-							"value": "2024-10-07"
-						},
-						{
-							"key": "end_date",
-							"value": "2024-10-11"
-						},
-						{
-							"key": "api_key",
-							"value": "key"
-						}
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "25bd6e07-5c44-486d-b678-12f2e1b68372",
+    "name": "node",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "10324306"
+  },
+  "item": [
+    {
+      "name": "local",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:4000/meteors",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["meteors"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "NASA",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.nasa.gov/neo/rest/v1/feed?start_date=2024-10-07&end_date=2024-10-11&api_key=WhhJBu83laHiy20aEKic0FQ1k70e1ewAfeooAEBH",
+          "protocol": "https",
+          "host": ["api", "nasa", "gov"],
+          "path": ["neo", "rest", "v1", "feed"],
+          "query": [
+            {
+              "key": "start_date",
+              "value": "2024-10-07"
+            },
+            {
+              "key": "end_date",
+              "value": "2024-10-11"
+            },
+            {
+              "key": "api_key",
+              "value": "key"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
 }
