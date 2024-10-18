@@ -1,0 +1,12 @@
+  {% extends 'default_layout.njk' %}
+
+  {% block content %}
+
+  <h1>Rover last photo for {{ userName }} with id {{ userId }} from {{camera}}</h1>
+  {% if photoUrl %}
+    <img src="{{ photoUrl }}" alt="Rover photo">
+  {% else %}
+    <p>No photo found for user {{ userName }}</p>
+  {% endif %}
+
+  {% endblock %}
