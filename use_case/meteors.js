@@ -14,8 +14,8 @@ function createMainInfoEntity(meteor) {
     id: meteor.id,
     name: meteor.name,
     diameter:
-      (meteor.estimated_diameter.diameters.estimated_diameter_min +
-        meteor.estimated_diameter.diameters.estimated_diameter_max) /
+      (meteor.estimated_diameter.meters.estimated_diameter_min +
+        meteor.estimated_diameter.meters.estimated_diameter_max) /
       2,
     isHazardous: meteor.is_potentially_hazardous_asteroid,
     closeApproachDate: meteor.close_approach_data[0].close_approach_date_full,
