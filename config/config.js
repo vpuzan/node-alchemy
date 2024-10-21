@@ -10,6 +10,7 @@ const {
   PORT,
   SOL,
   CAMERA,
+  SENTRY_DSN
 } =
   process.env ||
   (() => {
@@ -23,4 +24,5 @@ export const config = {
   photoRoverUrl: `${PHOTOS_ROVER_API_URL}`,
   sol: SOL,
   camera: CAMERA,
+  dsn: SENTRY_DSN
 };

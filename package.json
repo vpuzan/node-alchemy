@@ -9,6 +9,8 @@
     "codeformat": "prettier --write ."
   },
   "dependencies": {
+    "@sentry/node": "^8.34.0",
+    "@sentry/profiling-node": "^8.34.0",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",

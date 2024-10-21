@@ -8,6 +8,11 @@ import Exception from '../exception/exception';
 
 const router = express.Router();
 
+router.get('/debug-sentry', (req, res, next: NextFunction) => {
+  throw new Exception(500, 'My first Sentry error!');
+});
+
+
 router.get('/meteors',
   validateRequest(meteorSchema),
   async (req: Request, res: Response, next: NextFunction) => {

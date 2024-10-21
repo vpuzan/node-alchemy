@@ -10,6 +10,7 @@ const {
   PORT,
   SOL,
   CAMERA,
+  SENTRY_DSN
 } = process.env || (() => {
   throw new Error('Missing env keys');
 })();
@@ -21,6 +22,7 @@ export const configApp: {
   photoRoverUrl: string;
   sol?: string;
   camera?: string;
+  dsn?: string;
 } = {
   port: PORT!,
   nasaBaseUrl: NASA_BASE_URL!,
@@ -28,4 +30,5 @@ export const configApp: {
   photoRoverUrl: `${PHOTOS_ROVER_API_URL}`,
   sol: SOL,
   camera: CAMERA,
+  dsn: SENTRY_DSN
 };
