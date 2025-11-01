@@ -7,7 +7,8 @@
     "eslint:recommended",
     "airbnb-base",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier",
+    "plugin:import/typescript"
   ],
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -21,6 +22,11 @@
     "prettier",
     "security"
   ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "parser": "@typescript-eslint/parser",
   "rules": {
     "semi": ["error", "always"],
